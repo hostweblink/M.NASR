@@ -2,6 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 
 function App() {
   /* =========================================================
+     PUBLIC URL HELPER (FOR GITHUB PAGES)
+  ========================================================= */
+  const publicUrl = process.env.PUBLIC_URL || "";
+
+  /* =========================================================
      STATE
   ========================================================= */
 
@@ -41,22 +46,22 @@ function App() {
     {
       title: "Urban Chic",
       images: [
-        "/photo1.png",
-        "/photo6.png",
+        `${publicUrl}/photo1.png`,
+        `${publicUrl}/photo6.png`,
       ],
     },
     {
       title: "Avant-Garde",
       images: [
-        "/photo2.png",
-        "/photo6.png",
+        `${publicUrl}/photo2.png`,
+        `${publicUrl}/photo6.png`,
       ],
     },
     {
       title: "Studio Portrait",
       images: [
-        "/photo7.png",
-        "/photo5.png",
+        `${publicUrl}/photo7.png`,
+        `${publicUrl}/photo5.png`,
       ],
     },
   ];
@@ -64,37 +69,37 @@ function App() {
   const campaigns = [
     {
       title: "Summer Editorial",
-      image: "/photo5.png",
+      image: `${publicUrl}/photo5.png`,
     },
     {
       title: "Editorial Portrait",
-      image: "/photo6.png",
+      image: `${publicUrl}/photo6.png`,
     },
     {
       title: "Formal Series",
-      image: "/photo1.png",
+      image: `${publicUrl}/photo1.png`,
     },
     {
       title: "Streetwear",
-      image: "/photo2.png",
+      image: `${publicUrl}/photo2.png`,
     },
   ];
 
   // Selected Works: Block 2 is the quote "Fashion is about dreaming"
   const selectedWorks = [
-    { type: "image", src: "/photo5.png", alt: "Work 1" },
+    { type: "image", src: `${publicUrl}/photo5.png`, alt: "Work 1" },
     { type: "quote-dream", quote: "Fashion is about dreaming.", author: "— SELECTED WORKS" },
-    { type: "image", src: "/photo6.png", alt: "Work 2" },
-    { type: "image", src: "/photo1.png", alt: "Work 3" },
-    { type: "image", src: "/photo2.png", alt: "Work 4" },
+    { type: "image", src: `${publicUrl}/photo6.png`, alt: "Work 2" },
+    { type: "image", src: `${publicUrl}/photo1.png`, alt: "Work 3" },
+    { type: "image", src: `${publicUrl}/photo2.png`, alt: "Work 4" },
     { type: "quote-style", quote: "Style is identity.", author: "— M.NASR" },
-    { type: "image", src: "/photo7.png", alt: "Work 5" },
+    { type: "image", src: `${publicUrl}/photo7.png`, alt: "Work 5" },
   ];
 
   const photography = [
-    "/lens1.jpeg",
-    "/lens2.jpeg",
-    "/lens3.jpeg",
+    `${publicUrl}/lens1.jpeg`,
+    `${publicUrl}/lens2.jpeg`,
+    `${publicUrl}/lens3.jpeg`,
   ];
 
   /* =========================================================
@@ -166,9 +171,7 @@ function App() {
 
   const prevEditorial = () => {
     setActiveImageIndex(0);
-    setActiveEditorial(
-      (prev) => (prev - 1 + editorials.length) % editorials.length
-    );
+    setActiveEditorial((prev) => (prev - 1 + editorials.length) % editorials.length);
   };
 
   const nextImage = (e) => {
@@ -291,7 +294,7 @@ function App() {
           <div className="hero-image-wrapper">
             <div className="hero-image-border" />
             <img
-              src="/profile.png"
+              src={`${publicUrl}/profile.png`}
               alt="Mohammed Nasr"
               className="hero-image"
             />
@@ -350,7 +353,7 @@ function App() {
 
         <div className="about-grid">
           <div className="about-image reveal">
-            <img src="/photo5.png" alt="Mohammed Nasr portrait" />
+            <img src={`${publicUrl}/photo5.png`} alt="Mohammed Nasr portrait" />
             <div className="image-caption">
               MOHAMMED NASR
               <span>EDITORIAL PORTRAIT</span>
@@ -709,7 +712,7 @@ function App() {
 
         <div className="video-wrapper reveal">
           <video
-            src="/video.mp4"
+            src={`${publicUrl}/video.mp4`}
             autoPlay
             loop
             muted
@@ -2212,6 +2215,7 @@ footer span {
     font-size: 1.1rem;
   }
 
+  /* Editorials on Mobile: Hide Side Stack, Show Big Swiper Card */
   .editorial-slider {
     height: 570px;
     grid-template-columns: 1fr;
@@ -2303,6 +2307,22 @@ footer span {
 
   .hero-side-text {
     display: none;
+  }
+
+  /* Marquee Compact Slim Height on Mobile */
+  .marquee {
+    padding: 10px 0;
+  }
+
+  .marquee-content span {
+    font-size: 0.85rem;
+    letter-spacing: 2.5px;
+    margin: 0 16px;
+  }
+
+  .marquee-content i {
+    font-size: 0.5rem;
+    opacity: 0.4;
   }
 
   .section {

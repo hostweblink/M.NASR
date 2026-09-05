@@ -2,6 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 
 export default function App() {
   /* =========================================================
+     PUBLIC URL HELPER (FOR GITHUB PAGES)
+  ========================================================= */
+  const publicUrl = process.env.PUBLIC_URL || "";
+
+  /* =========================================================
      STATE
   ========================================================= */
 
@@ -40,36 +45,40 @@ export default function App() {
   const editorials = [
     {
       title: "Urban Chic",
-      images: ["/photo1.png", "/photo6.png"],
+      images: [`${publicUrl}/photo1.png`, `${publicUrl}/photo6.png`],
     },
     {
       title: "Avant-Garde",
-      images: ["/photo2.png", "/photo6.png"],
+      images: [`${publicUrl}/photo2.png`, `${publicUrl}/photo6.png`],
     },
     {
       title: "Studio Portrait",
-      images: ["/photo7.png", "/photo5.png"],
+      images: [`${publicUrl}/photo7.png`, `${publicUrl}/photo5.png`],
     },
   ];
 
   const campaigns = [
-    { title: "Summer Editorial", image: "/photo5.png" },
-    { title: "Editorial Portrait", image: "/photo6.png" },
-    { title: "Formal Series", image: "/photo1.png" },
-    { title: "Streetwear", image: "/photo2.png" },
+    { title: "Summer Editorial", image: `${publicUrl}/photo5.png` },
+    { title: "Editorial Portrait", image: `${publicUrl}/photo6.png` },
+    { title: "Formal Series", image: `${publicUrl}/photo1.png` },
+    { title: "Streetwear", image: `${publicUrl}/photo2.png` },
   ];
 
   const selectedWorks = [
-    { type: "image", src: "/photo5.png", alt: "Work 1" },
+    { type: "image", src: `${publicUrl}/photo5.png`, alt: "Work 1" },
     { type: "quote-dream", quote: "Fashion is about dreaming.", author: "— SELECTED WORKS" },
-    { type: "image", src: "/photo6.png", alt: "Work 2" },
-    { type: "image", src: "/photo1.png", alt: "Work 3" },
-    { type: "image", src: "/photo2.png", alt: "Work 4" },
+    { type: "image", src: `${publicUrl}/photo6.png`, alt: "Work 2" },
+    { type: "image", src: `${publicUrl}/photo1.png`, alt: "Work 3" },
+    { type: "image", src: `${publicUrl}/photo2.png`, alt: "Work 4" },
     { type: "quote-style", quote: "Style is identity.", author: "— M.NASR" },
-    { type: "image", src: "/photo7.png", alt: "Work 5" },
+    { type: "image", src: `${publicUrl}/photo7.png`, alt: "Work 5" },
   ];
 
-  const photography = ["/lens1.jpeg", "/lens2.jpeg", "/lens3.jpeg"];
+  const photography = [
+    `${publicUrl}/lens1.jpeg`,
+    `${publicUrl}/lens2.jpeg`,
+    `${publicUrl}/lens3.jpeg`,
+  ];
 
   /* =========================================================
      THEME & REVEAL
@@ -161,20 +170,52 @@ export default function App() {
   };
 
   /* =========================================================
-     LOADING SCREEN
+     CUSTOM GLOBAL KEYFRAMES STYLES
+  ========================================================= */
+  const customStyles = `
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400;1,500&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
+    
+    @keyframes marqueeLoop {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    @keyframes luxuryScrollLine {
+      0% { transform: scaleX(0); transform-origin: left center; }
+      44% { transform: scaleX(1); transform-origin: left center; }
+      48% { transform: scaleX(1); transform-origin: right center; }
+      92% { transform: scaleX(0); transform-origin: right center; }
+      100% { transform: scaleX(0); transform-origin: right center; }
+    }
+    @keyframes loaderLineAnim {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(0%); }
+    }
+    .reveal {
+      transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .animate-loader-line {
+      animation: loaderLineAnim 1.3s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    }
+  `;
+
+  /* =========================================================
+     LOADING SCREEN (With Fixed Working Animation)
   ========================================================= */
 
   if (loading) {
     return (
-      <div className="fixed inset-0 z-[99999] bg-[#111] text-white flex flex-col items-center justify-center">
-        <div className="flex flex-col items-center font-['Playfair_Display'] text-[clamp(2rem,7vw,5rem)] leading-[0.85] tracking-[4px]">
-          <span>MOHAMMED</span>
-          <span className="italic">NASR</span>
+      <>
+        <style>{customStyles}</style>
+        <div className="fixed inset-0 z-[99999] bg-[#111] text-white flex flex-col items-center justify-center">
+          <div className="flex flex-col items-center font-['Playfair_Display'] text-[clamp(2rem,7vw,5rem)] leading-[0.85] tracking-[4px]">
+            <span>MOHAMMED</span>
+            <span className="italic">NASR</span>
+          </div>
+          <div className="w-44 h-[1.5px] bg-neutral-800 mt-9 overflow-hidden relative">
+            <div className="h-full w-full bg-white animate-loader-line" />
+          </div>
         </div>
-        <div className="w-44 h-[1px] bg-neutral-700 mt-9 overflow-hidden">
-          <div className="h-full w-full bg-white -translate-x-full animate-[loaderLine_1.3s_ease_forwards]" />
-        </div>
-      </div>
+      </>
     );
   }
 
@@ -190,28 +231,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#f6f5f2] text-[#111] dark:bg-[#0d0d0d] dark:text-[#f4f2ed] font-['DM_Sans'] transition-colors duration-500 overflow-x-hidden selection:bg-[#7c2c28] selection:text-white">
       
-      {/* Minimal Keyframes for Marquee & Scroll Physics */}
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400;1,500&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
-        
-        @keyframes marqueeLoop {
-          0% { transform: translateX(0%); }
-          100% { transform: translateX(-50%); }
-        }
-        @keyframes luxuryScrollLine {
-          0% { transform: scaleX(0); transform-origin: left center; }
-          44% { transform: scaleX(1); transform-origin: left center; }
-          48% { transform: scaleX(1); transform-origin: right center; }
-          92% { transform: scaleX(0); transform-origin: right center; }
-          100% { transform: scaleX(0); transform-origin: right center; }
-        }
-        @keyframes loaderLine {
-          to { transform: translateX(0); }
-        }
-        .reveal {
-          transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-      `}</style>
+      <style>{customStyles}</style>
 
       {/* =====================================================
           NAVBAR
@@ -247,7 +267,7 @@ export default function App() {
             <button
               key={id}
               onClick={() => scrollToSection(id)}
-              className="text-left md:text-center uppercase text-[0.7rem] tracking-[1.5px] opacity-70 hover:opacity-100 transition-opacity"
+              className="text-left md:text-center uppercase text-[0.7rem] tracking-[1.5px] opacity-70 hover:opacity-100 transition-opacity cursor-pointer"
             >
               {label}
             </button>
@@ -266,7 +286,7 @@ export default function App() {
           <button
             onClick={() => setMobileMenu(!mobileMenu)}
             aria-label="Toggle menu"
-            className="md:hidden w-9 h-9 rounded-full border border-current flex items-center justify-center text-base"
+            className="md:hidden w-9 h-9 rounded-full border border-current flex items-center justify-center text-base cursor-pointer"
           >
             {mobileMenu ? "×" : "☰"}
           </button>
@@ -285,7 +305,7 @@ export default function App() {
           <div className="w-[190px] h-[255px] md:w-[270px] md:h-[360px] relative mx-auto mb-9 group">
             <div className="absolute inset-[14px_-14px_-14px_14px] border border-[#7c2c28] z-0 transition-all duration-500 group-hover:inset-[8px_-8px_-8px_8px]" />
             <img
-              src="/profile.png"
+              src={`${publicUrl}/profile.png`}
               alt="Mohammed Nasr"
               className="w-full h-full object-cover relative z-10 grayscale-[15%]"
             />
@@ -319,17 +339,19 @@ export default function App() {
       </header>
 
       {/* =====================================================
-          MARQUEE
+          MARQUEE (Slim & Compact on Mobile)
       ===================================================== */}
-      <section className="bg-[#111] text-white overflow-hidden py-6 whitespace-nowrap flex select-none">
+      <section className="bg-[#111] text-white overflow-hidden py-2.5 md:py-6 whitespace-nowrap flex select-none">
         <div className="flex w-max will-change-transform animate-[marqueeLoop_32s_linear_infinite]">
           {[1, 2].map((block) => (
             <div className="flex items-center shrink-0" key={block}>
               {[1, 2, 3].map((rep) =>
                 marqueeWords.map((word, idx) => (
                   <React.Fragment key={`${rep}-${idx}`}>
-                    <span className="font-['Playfair_Display'] text-xl md:text-2xl tracking-[4px] mx-7 md:mx-9 shrink-0">{word}</span>
-                    <i className="text-xs opacity-45 not-italic shrink-0">✦</i>
+                    <span className="font-['Playfair_Display'] text-xs sm:text-sm md:text-2xl tracking-[2.5px] md:tracking-[4px] mx-4 md:mx-9 shrink-0">
+                      {word}
+                    </span>
+                    <i className="text-[0.55rem] md:text-xs opacity-45 not-italic shrink-0">✦</i>
                   </React.Fragment>
                 ))
               )}
@@ -347,7 +369,7 @@ export default function App() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24 items-center">
           <div className="relative reveal opacity-0 translate-y-11">
             <img
-              src="/photo5.png"
+              src={`${publicUrl}/photo5.png`}
               alt="Mohammed Nasr portrait"
               className="w-full h-[430px] md:h-[650px] object-cover grayscale-[12%]"
             />
@@ -624,7 +646,7 @@ export default function App() {
           </p>
         </div>
 
-        {/* Staggered Grid via Tailwind: even children are translated down on mobile */}
+        {/* Staggered Grid: Even children shifted down on mobile */}
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4.5 items-start [&>*:nth-child(even)]:translate-y-9 [&>*:nth-child(even)]:mb-9 lg:[&>*:nth-child(even)]:translate-y-0 lg:[&>*:nth-child(even)]:mb-0 reveal opacity-0 translate-y-11">
           {selectedWorks.map((item, index) => {
             if (item.type === "quote-dream") {
@@ -736,7 +758,7 @@ export default function App() {
 
         <div className="relative overflow-hidden bg-black reveal opacity-0 translate-y-11">
           <video
-            src="/video.mp4"
+            src={`${publicUrl}/video.mp4`}
             autoPlay
             loop
             muted
