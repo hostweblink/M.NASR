@@ -170,11 +170,22 @@ export default function App() {
   };
 
   /* =========================================================
-     CUSTOM GLOBAL KEYFRAMES STYLES
+     CUSTOM GLOBAL KEYFRAMES & ANTI-TEXT-SELECTION STYLES
   ========================================================= */
   const customStyles = `
     @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400;1,500&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
     
+    /* Disable long-press text selection and mobile Google popup */
+    *, *::before, *::after {
+      -webkit-touch-callout: none !important;
+      -webkit-user-select: none !important;
+      -khtml-user-select: none !important;
+      -moz-user-select: none !important;
+      -ms-user-select: none !important;
+      user-select: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+    }
+
     @keyframes marqueeLoop {
       0% { transform: translateX(0%); }
       100% { transform: translateX(-50%); }
@@ -190,16 +201,27 @@ export default function App() {
       0% { transform: translateX(-100%); }
       100% { transform: translateX(0%); }
     }
+    @keyframes editorialFlash {
+      0% {
+        opacity: 0.92;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
     .reveal {
       transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
     .animate-loader-line {
       animation: loaderLineAnim 1.3s cubic-bezier(0.65, 0, 0.35, 1) forwards;
     }
+    .animate-flash {
+      animation: editorialFlash 0.42s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
   `;
 
   /* =========================================================
-     LOADING SCREEN (With Fixed Working Animation)
+     LOADING SCREEN
   ========================================================= */
 
   if (loading) {
@@ -439,7 +461,7 @@ export default function App() {
       </section>
 
       {/* =====================================================
-          EDITORIALS (3-Block Swappable View)
+          EDITORIALS (3-Block Swappable View with Gradient Flash)
       ===================================================== */}
       <section id="portfolio" className="relative py-24 md:py-36 px-[7vw] lg:px-[8vw]">
         <div className="absolute top-12 left-[7vw] lg:left-[8vw] text-[0.62rem] tracking-[2px] opacity-45">03 / EDITORIALS</div>
@@ -474,17 +496,23 @@ export default function App() {
               ←
             </button>
 
+            {/* Gradient Camera Flash on Photo/Collection Change */}
+            <div
+              key={`flash-${activeEditorial}-${activeImageIndex}`}
+              className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-tr from-[#7c2c28]/25 via-white/85 to-white dark:from-[#7c2c28]/25 dark:via-white/30 dark:to-white/45 animate-flash"
+            />
+
             <img
-              key={`${activeEditorial}-${activeImageIndex}`}
+              key={`img-${activeEditorial}-${activeImageIndex}`}
               src={activeImgSrc}
               alt={currentEditorial.title}
               onClick={() => setLightboxImage(activeImgSrc)}
-              className="w-full h-full object-cover animate-[fadeIn_0.5s_ease]"
+              className="w-full h-full object-cover"
             />
 
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none z-[5]" />
 
-            <div className="absolute left-6 md:left-10 bottom-6 md:bottom-10 text-white drop-shadow-[0_3px_20px_black] pointer-events-none">
+            <div className="absolute left-6 md:left-10 bottom-6 md:bottom-10 text-white drop-shadow-[0_3px_20px_black] pointer-events-none z-[6]">
               <span className="text-[0.6rem] tracking-[3px] uppercase">
                 ACTIVE COLLECTION · PHOTO {activeImageIndex + 1} / {currentEditorial.images.length}
               </span>
